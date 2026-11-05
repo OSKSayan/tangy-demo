@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tañgy brew — кофейня на Рыскулова</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#e9e3cf">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;0,700;1,600&family=Golos+Text:wght@400;500;600&display=swap">
+<style>
+/* Layout: the café's own olive-on-beige menu palette, green/cream stripes from the chairs, a patterned plate in the hero.
+   The one interactive moment is the "Завтрак своими руками" builder with a live total. */
+:root{
+  --paper:#efe9d6; --cream:#e2dbc1; --card:#f8f4e7; --ink:#2b2e18; --muted:#6b6a52; --olive:#55622a; --olive-2:#3f4a1d;
+  --sun:#e8b54a; --line:#d6ceb0;
+  --display:"Lora",Georgia,serif; --text:"Golos Text",system-ui,sans-serif;
+  --ease:cubic-bezier(0.23,1,0.32,1);
+}
+*{box-sizing:border-box}
+html{touch-action:manipulation;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.6 var(--text);-webkit-tap-highlight-color:transparent}
+a{color:inherit}
+a:focus-visible,button:focus-visible{outline:2px solid var(--olive);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:24px}
+
+.demo{background:var(--olive-2);color:#e9e3cf;font-size:13px;text-align:center;padding:7px 16px}
+
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:16px}
+.brand{text-decoration:none;font:700 28px/1 var(--display);color:var(--olive);letter-spacing:-.01em}
+nav{display:flex;gap:26px;font-size:15px}
+nav a{text-decoration:none;color:var(--muted)}
+nav a:hover{color:var(--ink)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:600 15px var(--text);text-decoration:none;padding:13px 24px;border-radius:999px;border:1.5px solid var(--olive);cursor:pointer;transition:transform 160ms var(--ease),background-color 160ms ease,color 160ms ease}
+.btn:active{transform:scale(.97)}
+.btn-olive{background:var(--olive);color:#f8f4e7}
+.btn-olive:hover{background:var(--olive-2)}
+.btn-line{background:transparent;color:var(--olive)}
+.btn-line:hover{background:var(--cream)}
+.btn[disabled]{opacity:.45;pointer-events:none}
+
+/* hero */
+.hero{padding-block:36px 72px}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:56px;align-items:center}
+.eyebrow{font-weight:600;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--olive);margin:0 0 16px}
+.hero h1{font:700 clamp(44px,7.4vw,86px)/1 var(--display);margin:0;letter-spacing:-.02em;text-wrap:balance}
+.hero h1 em{font-style:italic;color:var(--olive)}
+.hero p.lead{max-width:42ch;color:var(--muted);margin:22px 0 30px;font-size:18px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.facts{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:32px;font-size:15px;color:var(--muted)}
+.facts b{color:var(--ink);font-weight:600}
+
+/* plate with a painted rim, like their ceramics */
+.plate{position:relative;aspect-ratio:1;width:min(100%,420px);margin-inline:auto;border-radius:50%;
+  background:
+    radial-gradient(circle,var(--card) 0 55%,transparent 55.4%),
+    radial-gradient(circle,transparent 0 58%,var(--olive) 58.3% 59.6%,transparent 60%),
+    repeating-conic-gradient(var(--olive) 0 4deg,var(--card) 4deg 10deg),
+    var(--card);
+  box-shadow:0 0 0 10px var(--card),0 0 0 12px var(--olive),0 30px 60px -30px rgba(43,46,24,.6);
+  display:grid;place-items:center;text-align:center}
+.plate .in{max-width:52%}
+.plate b{display:block;font:700 clamp(26px,3.4vw,36px)/1.05 var(--display);color:var(--olive)}
+.plate span{display:block;margin-top:10px;color:var(--muted);font-size:15px}
+
+/* awning stripes */
+.stripes{height:22px;background:repeating-linear-gradient(90deg,var(--olive) 0 26px,var(--card) 26px 52px)}
+.ribbon{background:var(--olive);color:#f1ecd9}
+.ribbon .wrap{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 28px;padding-block:16px;font:600 italic 18px var(--display)}
+
+section{padding-block:80px}
+h2.big{font:700 clamp(34px,5vw,56px)/1.02 var(--display);margin:0 0 12px;letter-spacing:-.01em}
+.sub{color:var(--muted);margin:0 0 32px;max-width:58ch}
+.tag{display:inline-block;background:var(--sun);color:var(--ink);font:600 13px var(--text);padding:4px 12px;border-radius:999px;vertical-align:middle;margin-left:8px;letter-spacing:.02em}
+
+/* builder */
+.builder{background:var(--cream)}
+.b-grid{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:32px;align-items:start}
+.ings{display:flex;flex-wrap:wrap;gap:10px}
+.ing{display:inline-flex;align-items:baseline;gap:10px;font:500 16px var(--text);color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:10px 18px;cursor:pointer;transition:background-color 160ms ease,border-color 160ms ease,color 160ms ease,transform 160ms var(--ease)}
+.ing small{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ing:active{transform:scale(.96)}
+.ing[aria-pressed="true"]{background:var(--olive);border-color:var(--olive);color:#f8f4e7}
+.ing[aria-pressed="true"] small{color:#d9dcb8}
+.check{background:var(--card);border-radius:24px;padding:26px;position:sticky;top:20px;box-shadow:0 24px 50px -36px rgba(43,46,24,.7)}
+.check h3{font:700 22px var(--display);margin:0 0 4px}
+.check .hint{margin:0 0 16px;color:var(--muted);font-size:14px}
+.check ul{list-style:none;margin:0;padding:0;min-height:48px}
+.check li{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:15px}
+.check li span:last-child{font-variant-numeric:tabular-nums;color:var(--muted)}
+.check .empty{color:var(--muted);font-size:15px;padding:6px 0}
+.total{display:flex;justify-content:space-between;align-items:baseline;margin:16px 0 18px}
+.total b{font:700 32px var(--display);color:var(--olive);font-variant-numeric:tabular-nums}
+.check .cta .btn{flex:1}
+
+/* menu */
+.switch{display:inline-flex;background:var(--cream);border-radius:999px;padding:4px;margin-bottom:18px}
+.switch button{font:600 15px var(--text);border:0;background:transparent;color:var(--muted);padding:9px 22px;border-radius:999px;cursor:pointer;transition:background-color 160ms ease,color 160ms ease}
+.switch button[aria-selected="true"]{background:var(--olive);color:#f8f4e7}
+.tabs{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:26px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;font:500 15px var(--text);border:1.5px solid var(--line);background:var(--card);color:var(--ink);padding:8px 18px;border-radius:999px;cursor:pointer;transition:background-color 160ms ease,border-color 160ms ease}
+.tabs button[aria-selected="true"]{border-color:var(--olive);background:#e4e3c4}
+.panel{background:var(--card);border-radius:24px;padding:10px 30px 18px}
+.panel h4{font:600 italic 20px var(--display);color:var(--olive);margin:22px 0 4px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 20px;padding:14px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .n{font-weight:600}
+.row .p{font:700 18px var(--display);color:var(--olive);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.row .d{grid-column:1/-1;color:var(--muted);font-size:15px;margin-top:-2px}
+.note{color:var(--muted);font-size:14px;margin:16px 0 0}
+
+/* interior */
+.inter .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
+.swatch{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.swatch div{aspect-ratio:3/4;border-radius:18px}
+.s1{background:repeating-linear-gradient(90deg,var(--olive) 0 18px,var(--card) 18px 36px)}
+.s2{background:repeating-linear-gradient(90deg,var(--sun) 0 18px,var(--card) 18px 36px)}
+.s3{background:conic-gradient(var(--card) 0 25%,var(--line) 0 50%,var(--card) 0 75%,var(--line) 0) 0 0/36px 36px}
+.inter ul{margin:20px 0 0;padding-left:20px;color:var(--muted)}
+.inter li{margin-bottom:6px}
+
+/* visit */
+.visit{background:var(--cream)}
+.visit .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-bottom:34px}
+.visit h3{font:600 13px var(--text);letter-spacing:.14em;text-transform:uppercase;color:var(--olive);margin:0 0 8px}
+.visit p{margin:0}
+
+footer{padding-block:28px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+
+@media (prefers-reduced-motion:reduce){.btn,.ing{transition:none}}
+@media (max-width:760px){
+  nav{display:none}
+  .wrap{padding-inline:16px}
+  .hero .wrap,.b-grid,.inter .wrap,.visit .grid{grid-template-columns:1fr}
+  .hero .wrap{gap:40px}
+  .plate{width:min(78vw,340px)}
+  section{padding-block:60px}
+  .panel{padding:6px 18px 14px}
+  .check{position:static}
+  .ribbon .wrap{font-size:16px}
+}
+</style></head>
+<body>
+
+<div class="demo">Демо-концепт сайта от Pixel Studio · не официальный сайт кофейни</div>
+
+<header class="top"><div class="wrap">
+  <a class="brand" href="#">Tañgy brew</a>
+  <nav><a href="#build">Конструктор</a><a href="#menu">Меню</a><a href="#interior">Интерьер</a><a href="#visit">Как найти</a></nav>
+  <a class="btn btn-olive" href="https://wa.me/77072436188" target="_blank" rel="noopener">WhatsApp</a>
+</div></header>
+
+<main>
+  <section class="hero" style="padding-top:36px"><div class="wrap">
+    <div>
+      <p class="eyebrow">Specialty coffee · all-day breakfast · comfort food</p>
+      <h1>Место, где <em>остаются</em> дольше</h1>
+      <p class="lead">Кофейня на Рыскулова, 9А. Завтраки весь день, свежая паста, матча и кофе на альтернативе. Открыты каждый день с 8:00 до 21:00.</p>
+      <div class="cta">
+        <a class="btn btn-olive" href="#menu">Открыть меню</a>
+        <a class="btn btn-line" href="#build">Собрать свой завтрак</a>
+      </div>
+      <div class="facts"><span><b>4,8</b> в 2ГИС · 206 оценок</span><span><b>08:00–21:00</b> без выходных</span><span>Wi-Fi · карта · QR</span></div>
+    </div>
+    <div class="plate" aria-hidden="true"><div class="in"><b>Завтраки весь день</b><span>от 2 500 ₸</span></div></div>
+  </div></section>
+
+  <div class="stripes" aria-hidden="true"></div>
+  <div class="ribbon"><div class="wrap"><span>Спешелти-кофе</span><span>Шпинатные вафли</span><span>Том-ям</span><span>Матча</span><span>Сырники</span></div></div>
+
+  <section class="builder" id="build"><div class="wrap">
+    <h2 class="big">Завтрак своими руками <span class="tag">до 11:00</span></h2>
+    <p class="sub">Выберите, что положить на тарелку, и сразу увидите сумму. Готовый список можно отправить в WhatsApp.</p>
+    <div class="b-grid">
+      <div class="ings" id="ings"></div>
+      <aside class="check" aria-live="polite">
+        <h3>Ваша тарелка</h3>
+        <p class="hint">Цены по меню кофейни</p>
+        <ul id="picked"></ul>
+        <div class="total"><span>Итого</span><b id="sum">0 ₸</b></div>
+        <div class="cta">
+          <a class="btn btn-olive" id="send" href="#" target="_blank" rel="noopener" disabled>Отправить в WhatsApp</a>
+          <button class="btn btn-line" id="reset" type="button">Сбросить</button>
+        </div>
+      </aside>
+    </div>
+  </div></section>
+
+  <section id="menu"><div class="wrap">
+    <h2 class="big">Меню</h2>
+    <p class="sub">Цены в тенге.</p>
+    <div class="switch" role="tablist" aria-label="Раздел меню">
+      <button type="button" role="tab" data-part="kitchen" aria-selected="true">Кухня</button>
+      <button type="button" role="tab" data-part="bar" aria-selected="false">Бар</button>
+    </div>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Категории"></div>
+    <div class="panel" id="panel" role="tabpanel"></div>
+  </div></section>
+
+  <section class="inter" id="interior" style="padding-top:0"><div class="wrap">
+    <div class="swatch" aria-hidden="true"><div class="s1"></div><div class="s2"></div><div class="s3"></div></div>
+    <div>
+      <h2 class="big">Интерьер, о котором пишут</h2>
+      <p class="sub" style="margin-bottom:0">Интерьер сделала студия Kioni Studios, и проект опубликовали на международной архитектурной платформе Archello.</p>
+      <ul>
+        <li>Полосатые кресла и диваны</li>
+        <li>Плитка на столах и посуда с зелёным орнаментом</li>
+        <li>Уютный зал до 25 мест и бесплатный Wi-Fi</li>
+      </ul>
+    </div>
+  </div></section>
+
+  <section class="visit" id="visit"><div class="wrap">
+    <h2 class="big">Как нас найти</h2>
+    <div class="grid">
+      <div><h3>Адрес</h3><p>Астана, ул. Турара Рыскулова, 9А</p></div>
+      <div><h3>Часы</h3><p>Каждый день<br>08:00–21:00</p></div>
+      <div><h3>Телефон</h3><p><a href="tel:+77072436188">+7 707 243 61 88</a></p></div>
+    </div>
+    <div class="cta">
+      <a class="btn btn-olive" href="https://wa.me/77072436188" target="_blank" rel="noopener">Написать в WhatsApp</a>
+      <a class="btn btn-line" href="https://2gis.kz/astana/firm/70000001113375067" target="_blank" rel="noopener">Открыть в 2ГИС</a>
+      <a class="btn btn-line" href="https://www.instagram.com/tangy.brew/" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div></section>
+</main>
+
+<footer><div class="wrap">
+  <span>Tañgy brew · Астана</span>
+  <span>Меню также на казахском и английском</span>
+</div></footer>
+
+<script>
+const fmt = new Intl.NumberFormat("ru-RU");
+const money = v => typeof v === "number" ? fmt.format(v) + " ₸" : v;
+
+// Breakfast builder: [name, price]
+const INGS = [
+  ["Лосось",1600],["Мортаделла",1800],["Колбаски",700],["Яйцо",300],["Скрэмбл",1000],["Гуакамоле",700],
+  ["Огурцы",300],["Томаты",400],["Микс салата",400],["Хашбраун",300],["Тартин / чиабатта",300],
+  ["Шампиньоны жареные",400],["Сливочное масло",300],["Сметана",400],["Кремчиз",700],["Соус дзадзики",400],
+];
+const ings = document.getElementById("ings"), picked = document.getElementById("picked"),
+      sum = document.getElementById("sum"), send = document.getElementById("send");
+const chosen = new Set();
+INGS.forEach(([n, p], i) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "ing"; b.setAttribute("aria-pressed", "false");
+  b.innerHTML = `${n} <small>${fmt.format(p)} ₸</small>`;
+  b.addEventListener("click", () => { chosen.has(i) ? chosen.delete(i) : chosen.add(i); b.setAttribute("aria-pressed", chosen.has(i)); draw(); });
+  ings.appendChild(b);
+});
+function draw(){
+  const list = [...chosen].sort((a,b)=>a-b).map(i => INGS[i]);
+  const total = list.reduce((s, [, p]) => s + p, 0);
+  picked.innerHTML = list.length ? list.map(([n,p]) => `<li><span>${n}</span><span>${fmt.format(p)} ₸</span></li>`).join("") : `<li class="empty">Пока пусто, выберите ингредиенты</li>`;
+  sum.textContent = fmt.format(total) + " ₸";
+  if (list.length) {
+    const msg = "Здравствуйте! Хочу завтрак своими руками:\n" + list.map(([n]) => "• " + n).join("\n") + "\nИтого по меню: " + fmt.format(total) + " ₸";
+    send.href = "https://wa.me/77072436188?text=" + encodeURIComponent(msg); send.removeAttribute("disabled");
+  } else { send.href = "#"; send.setAttribute("disabled", ""); }
+}
+document.getElementById("reset").addEventListener("click", () => { chosen.clear(); ings.querySelectorAll(".ing").forEach(b => b.setAttribute("aria-pressed","false")); draw(); });
+draw();
+
+// Menu: { part: [[tab, [ ["#", subheading] | [name, price, note] ]]] }
+const MENU = {
+  kitchen: [
+    ["Завтраки", [
+      ["Шпинатные вафли с сёмгой и авокадо",4500,"вафли, лосось, яйцо пашот, авокадо, черри, огурцы, микс салата, голландский соус"],
+      ["Французский завтрак",4600,"круассан, копчёная индейка, скрэмбл, сыр чеддер, авокадо, микс салата"],
+      ["Английский завтрак",4500,"куриные колбаски, яйца на выбор, хашбраун, шампиньоны, микс салата, фасоль в томате, чиабатта"],
+      ["Скандинавский завтрак",4700,"яйца 7 минут, лосось, авокадо, маасдам, голубика, огурцы, грецкий орех, микс салата, черри, чиабатта"],
+      ["Итальянский завтрак",5200,"ташкентские помидоры, мортаделла, яйца 7 минут, моцарелла, песто, маслины, микс салата, тартин, оливковое масло, бальзамик-крем"],
+      ["Фермерский завтрак",4100,"яйца на выбор, филе индейки, болгарский перец, огурцы, черри, микс салата, сливочное масло, тартин"],
+      ["Завтрак бейгл",3900,"бейгл, лосось, гуакамоле, скрэмбл, огурцы, кремчиз, лист салата"],
+      ["Завтрак на тартине",3500,"тартин, лосось, авокадо, руккола, кремчиз, бальзамик-крем"],
+      ["Зелёная греча",2700,"зелёная греча, яйцо пашот, сливочное масло, пармезан, песто"],
+      ["Шакшука",3200,"яйца, овощной соус, тартин"],
+      ["Омлет с сыром",3200,"яйца, моцарелла, микс салата, черри, чиабатта со щавелем"],
+      ["Драники из цукини",4100,"драники, яйца на выбор, лосось, черри, соус дзадзики, микс салата"],
+      ["Крок-мадам",3500,"чиабатта, яйцо, сыр маасдам, филе индейки, соус морне"],
+    ]],
+    ["Сладкие завтраки", [
+      ["Рисовая каша с вишнёвым вареньем",2500,"рис, молоко, вишнёвое варенье, сливки, сливочное масло, мята"],
+      ["Овсяная каша с ягодами",2500,"овсянка, молоко, сливки, голубика, банан, сливочное масло, мята"],
+      ["Гранола со сметаной и ягодами",3000,"смесь гранол, сметана, голубика, мёд"],
+      ["Бельгийские вафли с мороженым",3300,"вафли, смородиновое варенье, солёная карамель, банан, мороженое, мята, сахарная пудра"],
+      ["Сырники со сметаной и вишнёвым вареньем",3500,"сырники, вишнёвое варенье, сметана, солёная карамель, миндальные лепестки, сахарная пудра"],
+      ["Панкейки с банановым кремом и смородиновым вареньем",3200,"панкейки, банановый крем, смородиновое варенье, голубика, сахарная пудра"],
+    ]],
+    ["Салаты и закуски", [
+      ["#","Салаты"],
+      ["Цезарь классический",3200,"куриное филе, перепелиные яйца, черри, айсберг, соус цезарь, сухарики"],
+      ["Цезарь с креветками",3500,"креветки, перепелиные яйца, черри, айсберг, соус цезарь, сухарики"],
+      ["Green салат",3200,"эдамаме, авокадо, огурцы, зелёное яблоко, цветная капуста, зелень, цитрусовый соус"],
+      ["#","Закуски"],
+      ["Круассан с индейкой",2500,"круассан, филе индейки, сыр чеддер, айсберг, соус цезарь, огурцы"],
+      ["Круассан с лососем",2900,"круассан, лосось, кремчиз, айсберг"],
+      ["Чиабатта с тунцом",3300,"чиабатта, тунец, сыр чеддер, песто, щавель, лист салата"],
+    ]],
+    ["Горячее и супы", [
+      ["#","Горячее"],
+      ["Паста Альфредо",4000,"куриное филе, феттучини, шампиньоны, пармезан, сливки"],
+      ["Паста с креветками",4200,"креветки, пенне, томатный соус, черри, пармезан"],
+      ["Паста болоньезе",4500,"говяжий фарш, спагетти, пармезан"],
+      ["Фрикадельки с пюре",4200,"говяжьи фрикадельки, картофельное пюре, соус, зелёное масло"],
+      ["Куриный шницель",3900,"шницель, птитим, грибной соус"],
+      ["Филе сёмги в соусе терияки",5500,"сёмга, рис, брокколи, соус терияки, чили-майо, кунжут"],
+      ["#","Супы"],
+      ["Том-ям",4700,"креветки, сёмга, бульон, шампиньоны, черри, кокосовое молоко, рис"],
+      ["Куриный суп",2500,"куриное филе, куриный бульон, лапша, перепелиное яйцо"],
+      ["Чечевичный суп",2200,"чечевица, сухарики, паприка, лимон"],
+    ]],
+  ],
+  bar: [
+    ["Кофе", [
+      ["#","Классика"],
+      ["Эспрессо",1000,""],
+      ["Американо","1 200 / 1 300 ₸","0,2 / 0,3 л"],
+      ["Капучино","1 300 / 1 600 / 1 800 ₸","0,2 / 0,3 / 0,4 л"],
+      ["Латте","1 600 / 1 800 ₸","0,3 / 0,4 л"],
+      ["Флэт уайт",1500,""],
+      ["Раф",1900,""],
+      ["#","Альтернатива"],
+      ["V60 / Ореа / Аэропресс",2300,"Specialty-лоты: около +700 ₸"],
+      ["Батч брю","1 400 / 1 600 ₸","0,2 / 0,3 л"],
+    ]],
+    ["Холодный кофе", [
+      ["Эспрессо-тоник",2100,""],["Монблан",1900,""],["Бамбл-кофе",2000,""],
+      ["Фраппучино",2600,""],["Ice черри",2000,""],["Cold brew",2400,""],
+    ]],
+    ["Матча и не кофе", [
+      ["#","Матча"],
+      ["Зелёная / голубая матча",2100,""],["Ice матча латте",2100,""],["Ice матча тоник",2300,""],
+      ["#","Не кофе"],
+      ["Горячий шоколад",1400,""],["Какао",1400,""],
+      ["#","Милкшейки"],
+      ["Малиновый",2200,""],["Шоколадный",2200,""],["Ванильный",2200,""],
+    ]],
+    ["Чай", [
+      ["#","Чай · 0,35 / 0,6 л"],
+      ["Английский завтрак","1 000 / 2 000 ₸",""],["Эрл Грей","1 000 / 2 000 ₸",""],["Пуэр","1 000 / 2 000 ₸",""],
+      ["Сенча / жасмин / молочный улун","1 000 / 2 000 ₸",""],
+      ["#","Авторский чай · 0,35 / 0,6 л"],
+      ["Абрикосовое утро","1 800 / 3 000 ₸",""],["Малиновый закат","1 800 / 3 000 ₸",""],
+      ["Розовый грейпфрут","1 800 / 3 000 ₸",""],["Глинтвейн","1 800 / 3 000 ₸",""],
+      ["#","Ice-чай"],
+      ["Смородина-бергамот",2100,""],["Грейпфрут-жасмин",2100,""],
+    ]],
+    ["Лимонады и смузи", [
+      ["#","Лимонады · 0,45 / 1 л"],
+      ["Ягодный сад","2 000 / 3 000 ₸",""],["Манго экзотика","2 000 / 3 000 ₸",""],
+      ["Клюквенный бриз","2 000 / 3 000 ₸",""],["Алоэ манго","2 000 / 3 000 ₸",""],
+      ["#","Смузи"],
+      ["Green",2500,""],["Клубника-банан",2500,""],["Ягодный",2500,""],
+      ["#","Свежевыжатый сок · 0,25 л"],
+      ["Апельсин / грейпфрут",2300,""],
+    ]],
+    ["Напитки и допы", [
+      ["#","Напитки"],
+      ["Tassay 0,2 л",800,""],["Coca-Cola / Schweppes",1000,""],["Piko сок",650,""],
+      ["#","Добавки"],
+      ["Доп. шот эспрессо",600,""],["Молоко / альтернативное","300 / 500 ₸",""],
+      ["Пюре в ассортименте",400,""],["Сироп в ассортименте",250,""],
+    ]],
+  ],
+};
+
+const tabs = document.getElementById("tabs"), panel = document.getElementById("panel");
+let part = "kitchen";
+function showTab(i){
+  [...tabs.children].forEach((t,k) => t.setAttribute("aria-selected", k === i));
+  const [, items] = MENU[part][i];
+  panel.innerHTML = items.map(it => it[0] === "#"
+    ? `<h4>${it[1]}</h4>`
+    : `<div class="row"><span class="n">${it[0]}</span><span class="p">${money(it[1])}</span>${it[2] ? `<span class="d">${it[2]}</span>` : ""}</div>`
+  ).join("");
+}
+function showPart(p){
+  part = p;
+  document.querySelectorAll(".switch button").forEach(b => b.setAttribute("aria-selected", b.dataset.part === p));
+  tabs.innerHTML = "";
+  MENU[p].forEach(([name], i) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.setAttribute("role","tab"); b.textContent = name;
+    b.addEventListener("click", () => showTab(i));
+    tabs.appendChild(b);
+  });
+  showTab(0);
+}
+document.querySelectorAll(".switch button").forEach(b => b.addEventListener("click", () => showPart(b.dataset.part)));
+showPart("kitchen");
+</script>
+</body></html>
