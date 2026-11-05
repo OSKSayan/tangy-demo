@@ -171,7 +171,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
 
   <section class="builder" id="build"><div class="wrap">
     <h2 class="big">Завтрак своими руками <span class="tag">до 11:00</span></h2>
-    <p class="sub">Выберите, что положить на тарелку, и сразу увидите сумму. Готовый список можно отправить в WhatsApp.</p>
+    <p class="sub">Выберите, что положить на тарелку, и сразу увидите сумму.</p>
     <div class="b-grid">
       <div class="ings" id="ings"></div>
       <aside class="check" aria-live="polite">
@@ -180,7 +180,6 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
         <ul id="picked"></ul>
         <div class="total"><span>Итого</span><b id="sum">0 ₸</b></div>
         <div class="cta">
-          <a class="btn btn-olive" id="send" href="#" target="_blank" rel="noopener" disabled>Отправить в WhatsApp</a>
           <button class="btn btn-line" id="reset" type="button">Сбросить</button>
         </div>
       </aside>
@@ -242,7 +241,7 @@ const INGS = [
   ["Шампиньоны жареные",400],["Сливочное масло",300],["Сметана",400],["Кремчиз",700],["Соус дзадзики",400],
 ];
 const ings = document.getElementById("ings"), picked = document.getElementById("picked"),
-      sum = document.getElementById("sum"), send = document.getElementById("send");
+      sum = document.getElementById("sum");
 const chosen = new Set();
 INGS.forEach(([n, p], i) => {
   const b = document.createElement("button");
@@ -256,10 +255,6 @@ function draw(){
   const total = list.reduce((s, [, p]) => s + p, 0);
   picked.innerHTML = list.length ? list.map(([n,p]) => `<li><span>${n}</span><span>${fmt.format(p)} ₸</span></li>`).join("") : `<li class="empty">Пока пусто, выберите ингредиенты</li>`;
   sum.textContent = fmt.format(total) + " ₸";
-  if (list.length) {
-    const msg = "Здравствуйте! Хочу завтрак своими руками:\n" + list.map(([n]) => "• " + n).join("\n") + "\nИтого по меню: " + fmt.format(total) + " ₸";
-    send.href = "https://wa.me/77072436188?text=" + encodeURIComponent(msg); send.removeAttribute("disabled");
-  } else { send.href = "#"; send.setAttribute("disabled", ""); }
 }
 document.getElementById("reset").addEventListener("click", () => { chosen.clear(); ings.querySelectorAll(".ing").forEach(b => b.setAttribute("aria-pressed","false")); draw(); });
 draw();
